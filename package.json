@@ -9,8 +9,11 @@
     "urlShortener": "urlShortenerC1AD90D3"
   },
   "scripts": {
-    "deploy": "npm run build && npm run test && cdk deploy",
-    "debug": "npm run build && npm run debug:getLongURL && npm run debug:urlShortener",
+    "deploy": "export ENVIRONMENT=prod && npm run build && npm run test && cdk deploy",
+    "debug": "export ENVIRONMENT=dev && npm run local:db-up && npm run build && npm run debug:getLongURL && npm run debug:urlShortener && npm run local:db-down",
+    "local:db-cli": "npm run local:db-up && sleep 1s && mongo mongodb://potrebitel:parola@localhost:27017",
+    "local:db-up": "cd debug && docker-compose up -d",
+    "local:db-down": "cd debug && docker-compose down",
     "debug:getLongURL": "sam local invoke ${npm_package_lambdas_getLongURL} -e debug/getLongURL.event.json > debug/getLongURL.output.json",
     "debug:urlShortener": "sam local invoke ${npm_package_lambdas_urlShortener} -e debug/urlShortener.event.json > debug/urlShortener.output.json",
     "build": "npm run build:TypeScript && npm run build:CloudFormation && npm run lint",

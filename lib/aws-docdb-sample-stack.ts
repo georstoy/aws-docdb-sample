@@ -1,9 +1,10 @@
+import { readFileSync } from "fs";
+
 import cdk = require("@aws-cdk/core");
 import ec2 = require("@aws-cdk/aws-ec2");
 import docdb = require("@aws-cdk/aws-docdb");
 import lambda = require("@aws-cdk/aws-lambda");
 import apigateway = require("@aws-cdk/aws-apigateway");
-import { IResource } from "@aws-cdk/core";
 
 interface IControllers {
   urlShortener: lambda.Function;
@@ -34,6 +35,7 @@ export class AwsDocdbSampleStack extends cdk.Stack {
 
   private DB_URL: string;
   private DB_NAME: string;
+  private DB_CLIENT_OPTIONS: string;
 
   /* REST API */
   private controllers: IControllers;
@@ -42,6 +44,7 @@ export class AwsDocdbSampleStack extends cdk.Stack {
   /******************************************************************** */
   /* Construction block                                                 */
   /*  - here the order of execution is of great importance              */
+  /*  - if used console.log will output in the template.yml             */
   /******************************************************************** */
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -52,11 +55,21 @@ export class AwsDocdbSampleStack extends cdk.Stack {
 
     /* Database */
     this.subnetGroup = this.createSubnetGroup();
-    this.dbCluster = this.createDbCluster();
-    this.dbInstance = this.createDbInstance();
-
-    this.DB_URL = `mongodb://${this.dbCluster.masterUsername}:${this.dbCluster.masterUserPassword}@${this.dbCluster.attrEndpoint}:${this.dbCluster.attrPort}`;
-    this.DB_NAME = this.dbInstance.dbInstanceIdentifier as string;
+    
+    if (process.env.ENVIRONMENT === 'dev') {
+      this.DB_URL = 'mongodb://potrebitel:parola@localhost:27017';
+      this.DB_NAME = 'urls';
+      this.DB_CLIENT_OPTIONS = JSON.stringify({ useUnifiedTopology: true });
+    } 
+    
+    if (process.env.ENVIRONMENT === 'prod') {
+      this.dbCluster = this.createDbCluster();
+      this.dbInstance = this.createDbInstance();
+      this.DB_URL = `mongodb://${this.dbCluster.masterUsername}:${this.dbCluster.masterUserPassword}@${this.dbCluster.attrEndpoint}:${this.dbCluster.attrPort}`;
+      this.DB_NAME = this.dbInstance.dbInstanceIdentifier as string;
+      const ca = [readFileSync(`${__dirname}/rds-combined-ca-bundle.pem`)];
+      this.DB_CLIENT_OPTIONS = JSON.stringify({ ssl: true, sslValidate: true, sslCA: ca, useNewUrlParser: true});
+    } 
 
     /* Controllers */
     this.controllers = this.createControllers();
@@ -160,29 +173,31 @@ export class AwsDocdbSampleStack extends cdk.Stack {
     const urlShortener = new lambda.Function(this, "urlShortener", {
       functionName: "urlShortener",
       runtime: lambda.Runtime.NODEJS_12_X,
-      vpc: this.vpc,
       code: new lambda.AssetCode("src"),
       handler: "urlShortener.handler",
-      timeout: cdk.Duration.seconds(60),
-      securityGroup: this.sg,
       environment: {
         DB_URL: this.DB_URL,
-        DB_NAME: this.DB_NAME
-      }
+        DB_NAME: this.DB_NAME,
+        DB_CLIENT_OPTIONS: this.DB_CLIENT_OPTIONS
+      },
+      timeout: cdk.Duration.seconds(60),
+      vpc: this.vpc,
+      securityGroup: this.sg
     });
 
     const getLongURL = new lambda.Function(this, "getLongURL", {
       functionName: "getLongURL",
       runtime: lambda.Runtime.NODEJS_12_X,
-      vpc: this.vpc,
       code: new lambda.AssetCode("src"),
       handler: "getLongURL.handler",
-      timeout: cdk.Duration.seconds(60),
-      securityGroup: this.sg,
       environment: {
         DB_URL: this.DB_URL,
-        DB_NAME: this.DB_NAME
-      }
+        DB_NAME: this.DB_NAME,
+        DB_CLIENT_OPTIONS: this.DB_CLIENT_OPTIONS
+      },
+      timeout: cdk.Duration.seconds(60),
+      vpc: this.vpc,
+      securityGroup: this.sg
     });
 
     return { urlShortener, getLongURL };

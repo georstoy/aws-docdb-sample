@@ -10,6 +10,8 @@ let dbClient: MongoClient;
 
 export async function handler(event: APIGatewayEvent, context: Context, callback: Callback) {
     try {
+        console.log(`In getLongURL`);
+        console.log(`[DB_URL] ${process.env.DB_URL}`);
         dbClient = await connectToDB();
         const db = dbClient.db(DB_NAME);
         const id = event.pathParameters!["id"];

@@ -403,34 +403,6 @@ Resources:
       DBSubnetGroupName: subnet-group
     Metadata:
       aws:cdk:path: AwsDocdbSampleStack/subnet-group
-  dbcluster:
-    Type: AWS::DocDB::DBCluster
-    Properties:
-      MasterUsername: dbuser
-      MasterUserPassword: dbpassword
-      AvailabilityZones: []
-      DBClusterIdentifier: docdb
-      DBSubnetGroupName: subnet-group
-      Port: 27017
-      StorageEncrypted: true
-      VpcSecurityGroupIds:
-        - Ref: docdblambdasgAE3421D4
-    DependsOn:
-      - subnetgroup
-    Metadata:
-      aws:cdk:path: AwsDocdbSampleStack/db-cluster
-  dbinstance:
-    Type: AWS::DocDB::DBInstance
-    Properties:
-      DBClusterIdentifier:
-        Ref: dbcluster
-      DBInstanceClass: db.r5.large
-      AutoMinorVersionUpgrade: true
-      DBInstanceIdentifier: staging
-    DependsOn:
-      - dbcluster
-    Metadata:
-      aws:cdk:path: AwsDocdbSampleStack/db-instance
   urlShortenerServiceRoleD76C9308:
     Type: AWS::IAM::Role
     Properties:
@@ -459,7 +431,7 @@ Resources:
     Properties:
       Code:
         S3Bucket:
-          Ref: AssetParameters41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515S3BucketF14EB423
+          Ref: AssetParametersff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876S3Bucket1CB94B2A
         S3Key:
           Fn::Join:
             - ""
@@ -467,12 +439,12 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParameters41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515S3VersionKeyFE1A66CA
+                      - Ref: AssetParametersff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876S3VersionKeyAFBB4B65
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParameters41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515S3VersionKeyFE1A66CA
+                      - Ref: AssetParametersff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876S3VersionKeyAFBB4B65
       Handler: urlShortener.handler
       Role:
         Fn::GetAtt:
@@ -481,18 +453,8 @@ Resources:
       Runtime: nodejs12.x
       Environment:
         Variables:
-          DB_URL:
-            Fn::Join:
-              - ""
-              - - mongodb://dbuser:dbpassword@
-                - Fn::GetAtt:
-                    - dbcluster
-                    - Endpoint
-                - ":"
-                - Fn::GetAtt:
-                    - dbcluster
-                    - Port
-          DB_NAME: staging
+          DB_URL: mongodb://potrebitel:parola@localhost:27017
+          DB_NAME: urls
       FunctionName: urlShortener
       Timeout: 60
       VpcConfig:
@@ -539,7 +501,7 @@ Resources:
     Properties:
       Code:
         S3Bucket:
-          Ref: AssetParameters41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515S3BucketF14EB423
+          Ref: AssetParametersff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876S3Bucket1CB94B2A
         S3Key:
           Fn::Join:
             - ""
@@ -547,12 +509,12 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParameters41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515S3VersionKeyFE1A66CA
+                      - Ref: AssetParametersff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876S3VersionKeyAFBB4B65
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParameters41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515S3VersionKeyFE1A66CA
+                      - Ref: AssetParametersff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876S3VersionKeyAFBB4B65
       Handler: getLongURL.handler
       Role:
         Fn::GetAtt:
@@ -561,18 +523,8 @@ Resources:
       Runtime: nodejs12.x
       Environment:
         Variables:
-          DB_URL:
-            Fn::Join:
-              - ""
-              - - mongodb://dbuser:dbpassword@
-                - Fn::GetAtt:
-                    - dbcluster
-                    - Endpoint
-                - ":"
-                - Fn::GetAtt:
-                    - dbcluster
-                    - Port
-          DB_NAME: staging
+          DB_URL: mongodb://potrebitel:parola@localhost:27017
+          DB_NAME: urls
       FunctionName: getLongURL
       Timeout: 60
       VpcConfig:
@@ -827,15 +779,15 @@ Resources:
       Modules: aws-cdk=1.20.0,@aws-cdk/assets=1.20.0,@aws-cdk/aws-apigateway=1.20.0,@aws-cdk/aws-cloudwatch=1.20.0,@aws-cdk/aws-docdb=1.20.0,@aws-cdk/aws-ec2=1.20.0,@aws-cdk/aws-events=1.20.0,@aws-cdk/aws-iam=1.20.0,@aws-cdk/aws-kms=1.20.0,@aws-cdk/aws-lambda=1.20.0,@aws-cdk/aws-s3=1.20.0,@aws-cdk/aws-s3-assets=1.20.0,@aws-cdk/aws-sqs=1.20.0,@aws-cdk/aws-ssm=1.20.0,@aws-cdk/core=1.20.0,@aws-cdk/cx-api=1.20.0,@aws-cdk/region-info=1.20.0,jsii-runtime=node.js/v12.14.0
     Condition: CDKMetadataAvailable
 Parameters:
-  AssetParameters41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515S3BucketF14EB423:
+  AssetParametersff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876S3Bucket1CB94B2A:
     Type: String
-    Description: S3 bucket for asset "41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515"
-  AssetParameters41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515S3VersionKeyFE1A66CA:
+    Description: S3 bucket for asset "ff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876"
+  AssetParametersff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876S3VersionKeyAFBB4B65:
     Type: String
-    Description: S3 key for asset version "41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515"
-  AssetParameters41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515ArtifactHashCC2A41A2:
+    Description: S3 key for asset version "ff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876"
+  AssetParametersff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876ArtifactHashFC90CF7E:
     Type: String
-    Description: Artifact hash for asset "41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515"
+    Description: Artifact hash for asset "ff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876"
 Outputs:
   apiEndpoint9349E63C:
     Value:
@@ -851,17 +803,7 @@ Outputs:
           - Ref: apiDeploymentStageprod896C8101
           - /
   dburl:
-    Value:
-      Fn::Join:
-        - ""
-        - - mongodb://dbuser:dbpassword@
-          - Fn::GetAtt:
-              - dbcluster
-              - Endpoint
-          - ":"
-          - Fn::GetAtt:
-              - dbcluster
-              - Port
+    Value: mongodb://potrebitel:parola@localhost:27017
 Conditions:
   CDKMetadataAvailable:
     Fn::Or:

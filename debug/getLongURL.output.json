@@ -1,2 +1,2 @@
 
-{"errorType":"MongoParseError","errorMessage":"Invalid connection string"}
+{"errorType":"MongoTimeoutError","errorMessage":"Server selection timed out after 30000 ms"}
