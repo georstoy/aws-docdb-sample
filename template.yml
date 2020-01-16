@@ -1,0 +1,930 @@
+Resources:
+  vpcA2121C38:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/21
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: AwsDocdbSampleStack/vpc
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/Resource
+  vpcPrivateSubnet1Subnet1Subnet2AC999BF:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.0.0/24
+      VpcId:
+        Ref: vpcA2121C38
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: AwsDocdbSampleStack/vpc/PrivateSubnet1Subnet1
+        - Key: aws-cdk:subnet-name
+          Value: PrivateSubnet1
+        - Key: aws-cdk:subnet-type
+          Value: Private
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PrivateSubnet1Subnet1/Subnet
+  vpcPrivateSubnet1Subnet1RouteTable8107BEC5:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: vpcA2121C38
+      Tags:
+        - Key: Name
+          Value: AwsDocdbSampleStack/vpc/PrivateSubnet1Subnet1
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PrivateSubnet1Subnet1/RouteTable
+  vpcPrivateSubnet1Subnet1RouteTableAssociationA95CBEEE:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: vpcPrivateSubnet1Subnet1RouteTable8107BEC5
+      SubnetId:
+        Ref: vpcPrivateSubnet1Subnet1Subnet2AC999BF
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PrivateSubnet1Subnet1/RouteTableAssociation
+  vpcPrivateSubnet1Subnet1DefaultRoute65D8FA86:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: vpcPrivateSubnet1Subnet1RouteTable8107BEC5
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: vpcPublicSubnet1Subnet1NATGateway71D271BD
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PrivateSubnet1Subnet1/DefaultRoute
+  vpcPrivateSubnet1Subnet2Subnet430DFF3F:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.1.0/24
+      VpcId:
+        Ref: vpcA2121C38
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: AwsDocdbSampleStack/vpc/PrivateSubnet1Subnet2
+        - Key: aws-cdk:subnet-name
+          Value: PrivateSubnet1
+        - Key: aws-cdk:subnet-type
+          Value: Private
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PrivateSubnet1Subnet2/Subnet
+  vpcPrivateSubnet1Subnet2RouteTable0D882142:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: vpcA2121C38
+      Tags:
+        - Key: Name
+          Value: AwsDocdbSampleStack/vpc/PrivateSubnet1Subnet2
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PrivateSubnet1Subnet2/RouteTable
+  vpcPrivateSubnet1Subnet2RouteTableAssociationEF28445A:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: vpcPrivateSubnet1Subnet2RouteTable0D882142
+      SubnetId:
+        Ref: vpcPrivateSubnet1Subnet2Subnet430DFF3F
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PrivateSubnet1Subnet2/RouteTableAssociation
+  vpcPrivateSubnet1Subnet2DefaultRoute368136C0:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: vpcPrivateSubnet1Subnet2RouteTable0D882142
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: vpcPublicSubnet1Subnet2NATGateway2D718381
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PrivateSubnet1Subnet2/DefaultRoute
+  vpcPrivateSubnet2Subnet1SubnetE33F48F8:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.2.0/24
+      VpcId:
+        Ref: vpcA2121C38
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: AwsDocdbSampleStack/vpc/PrivateSubnet2Subnet1
+        - Key: aws-cdk:subnet-name
+          Value: PrivateSubnet2
+        - Key: aws-cdk:subnet-type
+          Value: Private
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PrivateSubnet2Subnet1/Subnet
+  vpcPrivateSubnet2Subnet1RouteTable413E74C2:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: vpcA2121C38
+      Tags:
+        - Key: Name
+          Value: AwsDocdbSampleStack/vpc/PrivateSubnet2Subnet1
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PrivateSubnet2Subnet1/RouteTable
+  vpcPrivateSubnet2Subnet1RouteTableAssociation369A8C46:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: vpcPrivateSubnet2Subnet1RouteTable413E74C2
+      SubnetId:
+        Ref: vpcPrivateSubnet2Subnet1SubnetE33F48F8
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PrivateSubnet2Subnet1/RouteTableAssociation
+  vpcPrivateSubnet2Subnet1DefaultRoute941069ED:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: vpcPrivateSubnet2Subnet1RouteTable413E74C2
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: vpcPublicSubnet1Subnet1NATGateway71D271BD
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PrivateSubnet2Subnet1/DefaultRoute
+  vpcPrivateSubnet2Subnet2SubnetB37C38DA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.3.0/24
+      VpcId:
+        Ref: vpcA2121C38
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: AwsDocdbSampleStack/vpc/PrivateSubnet2Subnet2
+        - Key: aws-cdk:subnet-name
+          Value: PrivateSubnet2
+        - Key: aws-cdk:subnet-type
+          Value: Private
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PrivateSubnet2Subnet2/Subnet
+  vpcPrivateSubnet2Subnet2RouteTableCD2B1F37:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: vpcA2121C38
+      Tags:
+        - Key: Name
+          Value: AwsDocdbSampleStack/vpc/PrivateSubnet2Subnet2
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PrivateSubnet2Subnet2/RouteTable
+  vpcPrivateSubnet2Subnet2RouteTableAssociation7B782D90:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: vpcPrivateSubnet2Subnet2RouteTableCD2B1F37
+      SubnetId:
+        Ref: vpcPrivateSubnet2Subnet2SubnetB37C38DA
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PrivateSubnet2Subnet2/RouteTableAssociation
+  vpcPrivateSubnet2Subnet2DefaultRouteC5566EB9:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: vpcPrivateSubnet2Subnet2RouteTableCD2B1F37
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: vpcPublicSubnet1Subnet2NATGateway2D718381
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PrivateSubnet2Subnet2/DefaultRoute
+  vpcPublicSubnet1Subnet1Subnet559F4B86:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.4.0/28
+      VpcId:
+        Ref: vpcA2121C38
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: AwsDocdbSampleStack/vpc/PublicSubnet1Subnet1
+        - Key: aws-cdk:subnet-name
+          Value: PublicSubnet1
+        - Key: aws-cdk:subnet-type
+          Value: Public
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PublicSubnet1Subnet1/Subnet
+  vpcPublicSubnet1Subnet1RouteTableC4C2A01C:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: vpcA2121C38
+      Tags:
+        - Key: Name
+          Value: AwsDocdbSampleStack/vpc/PublicSubnet1Subnet1
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PublicSubnet1Subnet1/RouteTable
+  vpcPublicSubnet1Subnet1RouteTableAssociationDDB8150F:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: vpcPublicSubnet1Subnet1RouteTableC4C2A01C
+      SubnetId:
+        Ref: vpcPublicSubnet1Subnet1Subnet559F4B86
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PublicSubnet1Subnet1/RouteTableAssociation
+  vpcPublicSubnet1Subnet1DefaultRoute47B0C29A:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: vpcPublicSubnet1Subnet1RouteTableC4C2A01C
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: vpcIGWE57CBDCA
+    DependsOn:
+      - vpcVPCGW7984C166
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PublicSubnet1Subnet1/DefaultRoute
+  vpcPublicSubnet1Subnet1EIP3E70BBB9:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: AwsDocdbSampleStack/vpc/PublicSubnet1Subnet1
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PublicSubnet1Subnet1/EIP
+  vpcPublicSubnet1Subnet1NATGateway71D271BD:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - vpcPublicSubnet1Subnet1EIP3E70BBB9
+          - AllocationId
+      SubnetId:
+        Ref: vpcPublicSubnet1Subnet1Subnet559F4B86
+      Tags:
+        - Key: Name
+          Value: AwsDocdbSampleStack/vpc/PublicSubnet1Subnet1
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PublicSubnet1Subnet1/NATGateway
+  vpcPublicSubnet1Subnet2SubnetA23B9EAE:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.4.16/28
+      VpcId:
+        Ref: vpcA2121C38
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: AwsDocdbSampleStack/vpc/PublicSubnet1Subnet2
+        - Key: aws-cdk:subnet-name
+          Value: PublicSubnet1
+        - Key: aws-cdk:subnet-type
+          Value: Public
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PublicSubnet1Subnet2/Subnet
+  vpcPublicSubnet1Subnet2RouteTable9C289423:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: vpcA2121C38
+      Tags:
+        - Key: Name
+          Value: AwsDocdbSampleStack/vpc/PublicSubnet1Subnet2
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PublicSubnet1Subnet2/RouteTable
+  vpcPublicSubnet1Subnet2RouteTableAssociationC8609EA3:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: vpcPublicSubnet1Subnet2RouteTable9C289423
+      SubnetId:
+        Ref: vpcPublicSubnet1Subnet2SubnetA23B9EAE
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PublicSubnet1Subnet2/RouteTableAssociation
+  vpcPublicSubnet1Subnet2DefaultRoute5EBD8F0D:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: vpcPublicSubnet1Subnet2RouteTable9C289423
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: vpcIGWE57CBDCA
+    DependsOn:
+      - vpcVPCGW7984C166
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PublicSubnet1Subnet2/DefaultRoute
+  vpcPublicSubnet1Subnet2EIP9EB7381A:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: AwsDocdbSampleStack/vpc/PublicSubnet1Subnet2
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PublicSubnet1Subnet2/EIP
+  vpcPublicSubnet1Subnet2NATGateway2D718381:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - vpcPublicSubnet1Subnet2EIP9EB7381A
+          - AllocationId
+      SubnetId:
+        Ref: vpcPublicSubnet1Subnet2SubnetA23B9EAE
+      Tags:
+        - Key: Name
+          Value: AwsDocdbSampleStack/vpc/PublicSubnet1Subnet2
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/PublicSubnet1Subnet2/NATGateway
+  vpcIGWE57CBDCA:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: AwsDocdbSampleStack/vpc
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/IGW
+  vpcVPCGW7984C166:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: vpcA2121C38
+      InternetGatewayId:
+        Ref: vpcIGWE57CBDCA
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/vpc/VPCGW
+  docdblambdasgAE3421D4:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: AwsDocdbSampleStack/docdb-lambda-sg
+      GroupName: docdb-lambda-sg
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      SecurityGroupIngress:
+        - CidrIp: 10.0.0.0/21
+          Description: from 10.0.0.0/21:27017
+          FromPort: 27017
+          IpProtocol: tcp
+          ToPort: 27017
+      VpcId:
+        Ref: vpcA2121C38
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/docdb-lambda-sg/Resource
+  subnetgroup:
+    Type: AWS::DocDB::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Subnet Group for DocDB
+      SubnetIds:
+        - Ref: vpcPrivateSubnet1Subnet1Subnet2AC999BF
+        - Ref: vpcPrivateSubnet1Subnet2Subnet430DFF3F
+        - Ref: vpcPrivateSubnet2Subnet1SubnetE33F48F8
+        - Ref: vpcPrivateSubnet2Subnet2SubnetB37C38DA
+      DBSubnetGroupName: subnet-group
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/subnet-group
+  dbcluster:
+    Type: AWS::DocDB::DBCluster
+    Properties:
+      MasterUsername: dbuser
+      MasterUserPassword: dbpassword
+      AvailabilityZones: []
+      DBClusterIdentifier: docdb
+      DBSubnetGroupName: subnet-group
+      Port: 27017
+      StorageEncrypted: true
+      VpcSecurityGroupIds:
+        - Ref: docdblambdasgAE3421D4
+    DependsOn:
+      - subnetgroup
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/db-cluster
+  dbinstance:
+    Type: AWS::DocDB::DBInstance
+    Properties:
+      DBClusterIdentifier:
+        Ref: dbcluster
+      DBInstanceClass: db.r5.large
+      AutoMinorVersionUpgrade: true
+      DBInstanceIdentifier: staging
+    DependsOn:
+      - dbcluster
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/db-instance
+  urlShortenerServiceRoleD76C9308:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/urlShortener/ServiceRole/Resource
+  urlShortenerC1AD90D3:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParameters41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515S3BucketF14EB423
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515S3VersionKeyFE1A66CA
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515S3VersionKeyFE1A66CA
+      Handler: urlShortener.handler
+      Role:
+        Fn::GetAtt:
+          - urlShortenerServiceRoleD76C9308
+          - Arn
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          DB_URL:
+            Fn::Join:
+              - ""
+              - - mongodb://dbuser:dbpassword@
+                - Fn::GetAtt:
+                    - dbcluster
+                    - Endpoint
+                - ":"
+                - Fn::GetAtt:
+                    - dbcluster
+                    - Port
+          DB_NAME: staging
+      FunctionName: urlShortener
+      Timeout: 60
+      VpcConfig:
+        SecurityGroupIds:
+          - Fn::GetAtt:
+              - docdblambdasgAE3421D4
+              - GroupId
+        SubnetIds:
+          - Ref: vpcPrivateSubnet1Subnet1Subnet2AC999BF
+          - Ref: vpcPrivateSubnet1Subnet2Subnet430DFF3F
+          - Ref: vpcPrivateSubnet2Subnet1SubnetE33F48F8
+          - Ref: vpcPrivateSubnet2Subnet2SubnetB37C38DA
+    DependsOn:
+      - urlShortenerServiceRoleD76C9308
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/urlShortener/Resource
+      aws:asset:path: /home/ubuntu/Projects/codebase-2020-01/aws-docdb-sample/src
+      aws:asset:property: Code
+  getLongURLServiceRole2F182AEB:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/getLongURL/ServiceRole/Resource
+  getLongURLDAE59511:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParameters41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515S3BucketF14EB423
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515S3VersionKeyFE1A66CA
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515S3VersionKeyFE1A66CA
+      Handler: getLongURL.handler
+      Role:
+        Fn::GetAtt:
+          - getLongURLServiceRole2F182AEB
+          - Arn
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          DB_URL:
+            Fn::Join:
+              - ""
+              - - mongodb://dbuser:dbpassword@
+                - Fn::GetAtt:
+                    - dbcluster
+                    - Endpoint
+                - ":"
+                - Fn::GetAtt:
+                    - dbcluster
+                    - Port
+          DB_NAME: staging
+      FunctionName: getLongURL
+      Timeout: 60
+      VpcConfig:
+        SecurityGroupIds:
+          - Fn::GetAtt:
+              - docdblambdasgAE3421D4
+              - GroupId
+        SubnetIds:
+          - Ref: vpcPrivateSubnet1Subnet1Subnet2AC999BF
+          - Ref: vpcPrivateSubnet1Subnet2Subnet430DFF3F
+          - Ref: vpcPrivateSubnet2Subnet1SubnetE33F48F8
+          - Ref: vpcPrivateSubnet2Subnet2SubnetB37C38DA
+    DependsOn:
+      - getLongURLServiceRole2F182AEB
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/getLongURL/Resource
+      aws:asset:path: /home/ubuntu/Projects/codebase-2020-01/aws-docdb-sample/src
+      aws:asset:property: Code
+  apiC8550315:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: url-shortener
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/api/Resource
+  apiDeployment149F12948ade8a0063dbed60e218867e715db985:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      RestApiId:
+        Ref: apiC8550315
+      Description: Automatically created by the RestApi construct
+    DependsOn:
+      - apiidPOSTA01094D4
+      - apiid4CA1E428
+      - apiurlsPOSTEA619BF4
+      - apiurls674BF75E
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/api/Deployment/Resource
+  apiDeploymentStageprod896C8101:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      RestApiId:
+        Ref: apiC8550315
+      DeploymentId:
+        Ref: apiDeployment149F12948ade8a0063dbed60e218867e715db985
+      StageName: prod
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/api/DeploymentStage.prod/Resource
+  apiCloudWatchRoleAC81D93E:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: apigateway.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/api/CloudWatchRole/Resource
+  apiAccount57E28B43:
+    Type: AWS::ApiGateway::Account
+    Properties:
+      CloudWatchRoleArn:
+        Fn::GetAtt:
+          - apiCloudWatchRoleAC81D93E
+          - Arn
+    DependsOn:
+      - apiC8550315
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/api/Account
+  apiurls674BF75E:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Fn::GetAtt:
+          - apiC8550315
+          - RootResourceId
+      PathPart: urls
+      RestApiId:
+        Ref: apiC8550315
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/api/Default/urls/Resource
+  apiurlsPOSTApiPermissionAwsDocdbSampleStackapi61CC11E5POSTurls9F602543:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - urlShortenerC1AD90D3
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: apiC8550315
+            - /
+            - Ref: apiDeploymentStageprod896C8101
+            - /POST/urls
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/api/Default/urls/POST/ApiPermission.AwsDocdbSampleStackapi61CC11E5.POST..urls
+  apiurlsPOSTApiPermissionTestAwsDocdbSampleStackapi61CC11E5POSTurls90297601:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - urlShortenerC1AD90D3
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: apiC8550315
+            - /test-invoke-stage/POST/urls
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/api/Default/urls/POST/ApiPermission.Test.AwsDocdbSampleStackapi61CC11E5.POST..urls
+  apiurlsPOSTEA619BF4:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: POST
+      ResourceId:
+        Ref: apiurls674BF75E
+      RestApiId:
+        Ref: apiC8550315
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - ":apigateway:"
+              - Ref: AWS::Region
+              - :lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - urlShortenerC1AD90D3
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/api/Default/urls/POST/Resource
+  apiid4CA1E428:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Fn::GetAtt:
+          - apiC8550315
+          - RootResourceId
+      PathPart: "{id}"
+      RestApiId:
+        Ref: apiC8550315
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/api/Default/{id}/Resource
+  apiidPOSTApiPermissionAwsDocdbSampleStackapi61CC11E5POSTidA4D018E4:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - getLongURLDAE59511
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: apiC8550315
+            - /
+            - Ref: apiDeploymentStageprod896C8101
+            - /POST/{id}
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/api/Default/{id}/POST/ApiPermission.AwsDocdbSampleStackapi61CC11E5.POST..{id}
+  apiidPOSTApiPermissionTestAwsDocdbSampleStackapi61CC11E5POSTid78FA0745:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - getLongURLDAE59511
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: apiC8550315
+            - /test-invoke-stage/POST/{id}
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/api/Default/{id}/POST/ApiPermission.Test.AwsDocdbSampleStackapi61CC11E5.POST..{id}
+  apiidPOSTA01094D4:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: POST
+      ResourceId:
+        Ref: apiid4CA1E428
+      RestApiId:
+        Ref: apiC8550315
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - ":apigateway:"
+              - Ref: AWS::Region
+              - :lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - getLongURLDAE59511
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: AwsDocdbSampleStack/api/Default/{id}/POST/Resource
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Modules: aws-cdk=1.20.0,@aws-cdk/assets=1.20.0,@aws-cdk/aws-apigateway=1.20.0,@aws-cdk/aws-cloudwatch=1.20.0,@aws-cdk/aws-docdb=1.20.0,@aws-cdk/aws-ec2=1.20.0,@aws-cdk/aws-events=1.20.0,@aws-cdk/aws-iam=1.20.0,@aws-cdk/aws-kms=1.20.0,@aws-cdk/aws-lambda=1.20.0,@aws-cdk/aws-s3=1.20.0,@aws-cdk/aws-s3-assets=1.20.0,@aws-cdk/aws-sqs=1.20.0,@aws-cdk/aws-ssm=1.20.0,@aws-cdk/core=1.20.0,@aws-cdk/cx-api=1.20.0,@aws-cdk/region-info=1.20.0,jsii-runtime=node.js/v12.14.0
+    Condition: CDKMetadataAvailable
+Parameters:
+  AssetParameters41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515S3BucketF14EB423:
+    Type: String
+    Description: S3 bucket for asset "41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515"
+  AssetParameters41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515S3VersionKeyFE1A66CA:
+    Type: String
+    Description: S3 key for asset version "41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515"
+  AssetParameters41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515ArtifactHashCC2A41A2:
+    Type: String
+    Description: Artifact hash for asset "41abff3c3ae088afd7b5366df2dddfa49a66134e1dbfb14653fe75dc33814515"
+Outputs:
+  apiEndpoint9349E63C:
+    Value:
+      Fn::Join:
+        - ""
+        - - https://
+          - Ref: apiC8550315
+          - .execute-api.
+          - Ref: AWS::Region
+          - "."
+          - Ref: AWS::URLSuffix
+          - /
+          - Ref: apiDeploymentStageprod896C8101
+          - /
+  dburl:
+    Value:
+      Fn::Join:
+        - ""
+        - - mongodb://dbuser:dbpassword@
+          - Fn::GetAtt:
+              - dbcluster
+              - Endpoint
+          - ":"
+          - Fn::GetAtt:
+              - dbcluster
+              - Port
+Conditions:
+  CDKMetadataAvailable:
+    Fn::Or:
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ca-central-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - cn-north-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - cn-northwest-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-central-1
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-north-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-3
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - me-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - sa-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-east-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-west-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-west-2
+

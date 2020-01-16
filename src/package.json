@@ -12,7 +12,9 @@
   "dependencies": {
     "@types/aws-lambda": "^8.10.39",
     "@types/mongodb": "^3.3.14",
+    "@types/shortid": "0.0.29",
     "aws-lambda": "^1.0.5",
-    "mongodb": "^3.4.1"
+    "mongodb": "^3.4.1",
+    "shortid": "^2.2.15"
   }
 }

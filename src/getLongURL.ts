@@ -1,7 +1,8 @@
-import { APIGatewayEvent, Context, Callback } from "aws-lambda";
+import { APIGatewayEvent, Callback, Context } from "aws-lambda";
 
-import { connectToDB, success, redirect, notFound } from "./lib";
 import { MongoClient } from "mongodb";
+import { connectToDB } from "./lib/db";
+import { notFound, redirect, success } from "./lib/responses";
 
 const DB_NAME = process.env.DB_NAME as string;
 
@@ -13,13 +14,13 @@ export async function handler(event: APIGatewayEvent, context: Context, callback
         const db = dbClient.db(DB_NAME);
         const id = event.pathParameters!["id"];
         const dbItem = await db.collection("urls").findOne({shortId: id});
-        if(!dbItem) {
+        if (!dbItem) {
             return callback(null, notFound({}));
         }
         return callback(null, redirect(dbItem.url));
-    } catch(err) {
+    } catch (err) {
         console.error(err);
-        return callback("Internal error");
+        return callback(err);
     } finally {
         await dbClient.close();
     }

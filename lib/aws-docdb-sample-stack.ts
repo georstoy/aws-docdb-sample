@@ -41,6 +41,7 @@ export class AwsDocdbSampleStack extends cdk.Stack {
 
   /******************************************************************** */
   /* Construction block                                                 */
+  /*  - here the order of execution is of great importance              */
   /******************************************************************** */
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -75,22 +76,6 @@ export class AwsDocdbSampleStack extends cdk.Stack {
       "{id}",
       this.controllers.getLongURL
     );
-
-    /* original routing code
-
-    const urls = this.router.root.addResource("urls");
-    const urlShortenerLambdaIntegration = new apigateway.LambdaIntegration(
-      this.controllers.urlShortener
-    );
-    urls.addMethod("POST", urlShortenerLambdaIntegration);
-    
-    
-    const singleURL = urls.addResource(`{id}`);
-    const getLongURLLambdaIntegration = new apigateway.LambdaIntegration(
-      this.controllers.getLongURL
-    );
-    singleURL.addMethod("GET", getLongURLLambdaIntegration);
-    //*/
 
     new cdk.CfnOutput(this, "db-url", {
       value: this.DB_URL
@@ -208,12 +193,13 @@ export class AwsDocdbSampleStack extends cdk.Stack {
     const api = new apigateway.RestApi(this, "api", {
       restApiName: "url-shortener"
     });
+
     return api;
   };
 
   private attachController = (
     httpMethod: string,
-    parent: IResource, //apigateway.Resource,
+    parent: apigateway.IResource,
     resourceName: string,
     controller: lambda.Function
   ): void => {

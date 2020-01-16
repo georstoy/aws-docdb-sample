@@ -1,4 +1,4 @@
-import { APIGatewayEvent, Context, Callback } from "aws-lambda";
+import { APIGatewayEvent, Callback, Context } from "aws-lambda";
 import { MongoClient } from "mongodb";
 import { generate } from "shortid";
 import { connectToDB, success } from "./lib";
@@ -6,7 +6,7 @@ import { connectToDB, success } from "./lib";
 const DB_NAME = process.env.DB_NAME as string;
 let dbClient: MongoClient;
 
-export async function handler(event: APIGatewayEvent, context: Context, callback: Callback){
+export async function handler(event: APIGatewayEvent, context: Context, callback: Callback) {
     try {
         console.log(event);
         dbClient = await connectToDB();
@@ -17,13 +17,13 @@ export async function handler(event: APIGatewayEvent, context: Context, callback
             url: body.url,
             createdAt: new Date().toUTCString(),
             shortId,
-            requesterIP: event.requestContext.identity.sourceIp
+            requesterIP: event.requestContext.identity.sourceIp,
         });
         const baseURL = `https://${event.requestContext.domainName}${event.requestContext.path}`;
         callback(null, success({shortUrl: `${baseURL}/${shortId}`}));
-    } catch(err) {
+    } catch (err) {
         console.error(err);
-        callback("Internal error");
+        callback(err);
     } finally {
         await dbClient.close();
     }

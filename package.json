@@ -4,11 +4,20 @@
   "bin": {
     "aws-docdb-sample": "bin/aws-docdb-sample.js"
   },
+  "lambdas": {
+    "getLongURL": "getLongURLDAE59511",
+    "urlShortener": "urlShortenerC1AD90D3"
+  },
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
-    "test": "jest",
-    "cdk": "cdk"
+    "deploy": "npm run build && npm run test && cdk deploy",
+    "debug": "npm run build && npm run debug:getLongURL && npm run debug:urlShortener",
+    "debug:getLongURL": "sam local invoke ${npm_package_lambdas_getLongURL} -e debug/getLongURL.event.json > debug/getLongURL.output.json",
+    "debug:urlShortener": "sam local invoke ${npm_package_lambdas_urlShortener} -e debug/urlShortener.event.json > debug/urlShortener.output.json",
+    "build": "npm run build:TypeScript && npm run build:CloudFormation && npm run lint",
+    "build:TypeScript": "tsc",
+    "build:CloudFormation": "cdk synth --no-staging > template.yml",
+    "lint": "tslint -c tslint.json --fix 'src/*.ts'",
+    "test": "jest"
   },
   "devDependencies": {
     "@aws-cdk/assert": "^1.19.0",
@@ -25,7 +34,7 @@
     "@aws-cdk/aws-docdb": "^1.20.0",
     "@aws-cdk/aws-lambda": "^1.20.0",
     "@aws-cdk/core": "^1.19.0",
-    "mongodb": "^3.4.1",
-    "source-map-support": "^0.5.16"
+    "source-map-support": "^0.5.16",
+    "ts-lint": "^4.5.1"
   }
 }
