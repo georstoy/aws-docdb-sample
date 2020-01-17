@@ -1,2 +1,2 @@
 
-{"errorType":"MongoTimeoutError","errorMessage":"Server selection timed out after 30000 ms"}
+{"errorType":"SyntaxError","errorMessage":"Unexpected token o in JSON at position 1"}

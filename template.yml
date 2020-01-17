@@ -431,7 +431,7 @@ Resources:
     Properties:
       Code:
         S3Bucket:
-          Ref: AssetParametersff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876S3Bucket1CB94B2A
+          Ref: AssetParametersf131f25bae6dbb493985e55ec2779a0187bec3752ff510fd656b1453ca5e4ffdS3Bucket714C9AE0
         S3Key:
           Fn::Join:
             - ""
@@ -439,12 +439,12 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876S3VersionKeyAFBB4B65
+                      - Ref: AssetParametersf131f25bae6dbb493985e55ec2779a0187bec3752ff510fd656b1453ca5e4ffdS3VersionKey51F01C1A
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876S3VersionKeyAFBB4B65
+                      - Ref: AssetParametersf131f25bae6dbb493985e55ec2779a0187bec3752ff510fd656b1453ca5e4ffdS3VersionKey51F01C1A
       Handler: urlShortener.handler
       Role:
         Fn::GetAtt:
@@ -453,10 +453,11 @@ Resources:
       Runtime: nodejs12.x
       Environment:
         Variables:
-          DB_URL: mongodb://potrebitel:parola@localhost:27017
+          DB_URL: mongodb://potrebitel:parola@debug_database_1:27017
           DB_NAME: urls
+          ENVIRONMENT: dev
       FunctionName: urlShortener
-      Timeout: 60
+      Timeout: 3
       VpcConfig:
         SecurityGroupIds:
           - Fn::GetAtt:
@@ -501,7 +502,7 @@ Resources:
     Properties:
       Code:
         S3Bucket:
-          Ref: AssetParametersff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876S3Bucket1CB94B2A
+          Ref: AssetParametersf131f25bae6dbb493985e55ec2779a0187bec3752ff510fd656b1453ca5e4ffdS3Bucket714C9AE0
         S3Key:
           Fn::Join:
             - ""
@@ -509,12 +510,12 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876S3VersionKeyAFBB4B65
+                      - Ref: AssetParametersf131f25bae6dbb493985e55ec2779a0187bec3752ff510fd656b1453ca5e4ffdS3VersionKey51F01C1A
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876S3VersionKeyAFBB4B65
+                      - Ref: AssetParametersf131f25bae6dbb493985e55ec2779a0187bec3752ff510fd656b1453ca5e4ffdS3VersionKey51F01C1A
       Handler: getLongURL.handler
       Role:
         Fn::GetAtt:
@@ -523,10 +524,11 @@ Resources:
       Runtime: nodejs12.x
       Environment:
         Variables:
-          DB_URL: mongodb://potrebitel:parola@localhost:27017
+          DB_URL: mongodb://potrebitel:parola@debug_database_1:27017
           DB_NAME: urls
+          ENVIRONMENT: dev
       FunctionName: getLongURL
-      Timeout: 60
+      Timeout: 3
       VpcConfig:
         SecurityGroupIds:
           - Fn::GetAtt:
@@ -779,15 +781,15 @@ Resources:
       Modules: aws-cdk=1.20.0,@aws-cdk/assets=1.20.0,@aws-cdk/aws-apigateway=1.20.0,@aws-cdk/aws-cloudwatch=1.20.0,@aws-cdk/aws-docdb=1.20.0,@aws-cdk/aws-ec2=1.20.0,@aws-cdk/aws-events=1.20.0,@aws-cdk/aws-iam=1.20.0,@aws-cdk/aws-kms=1.20.0,@aws-cdk/aws-lambda=1.20.0,@aws-cdk/aws-s3=1.20.0,@aws-cdk/aws-s3-assets=1.20.0,@aws-cdk/aws-sqs=1.20.0,@aws-cdk/aws-ssm=1.20.0,@aws-cdk/core=1.20.0,@aws-cdk/cx-api=1.20.0,@aws-cdk/region-info=1.20.0,jsii-runtime=node.js/v12.14.0
     Condition: CDKMetadataAvailable
 Parameters:
-  AssetParametersff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876S3Bucket1CB94B2A:
+  AssetParametersf131f25bae6dbb493985e55ec2779a0187bec3752ff510fd656b1453ca5e4ffdS3Bucket714C9AE0:
     Type: String
-    Description: S3 bucket for asset "ff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876"
-  AssetParametersff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876S3VersionKeyAFBB4B65:
+    Description: S3 bucket for asset "f131f25bae6dbb493985e55ec2779a0187bec3752ff510fd656b1453ca5e4ffd"
+  AssetParametersf131f25bae6dbb493985e55ec2779a0187bec3752ff510fd656b1453ca5e4ffdS3VersionKey51F01C1A:
     Type: String
-    Description: S3 key for asset version "ff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876"
-  AssetParametersff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876ArtifactHashFC90CF7E:
+    Description: S3 key for asset version "f131f25bae6dbb493985e55ec2779a0187bec3752ff510fd656b1453ca5e4ffd"
+  AssetParametersf131f25bae6dbb493985e55ec2779a0187bec3752ff510fd656b1453ca5e4ffdArtifactHashE3581439:
     Type: String
-    Description: Artifact hash for asset "ff9c8c0a88f4ff784cc39b737c24d89ec127e4ba062bc9e37c92649b25b95876"
+    Description: Artifact hash for asset "f131f25bae6dbb493985e55ec2779a0187bec3752ff510fd656b1453ca5e4ffd"
 Outputs:
   apiEndpoint9349E63C:
     Value:
@@ -803,7 +805,7 @@ Outputs:
           - Ref: apiDeploymentStageprod896C8101
           - /
   dburl:
-    Value: mongodb://potrebitel:parola@localhost:27017
+    Value: mongodb://potrebitel:parola@debug_database_1:27017
 Conditions:
   CDKMetadataAvailable:
     Fn::Or:

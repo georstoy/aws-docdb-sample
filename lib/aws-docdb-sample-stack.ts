@@ -18,6 +18,7 @@ export class AwsDocdbSampleStack extends cdk.Stack {
   /*  - Constructs                                                      */
   /******************************************************************** */
   /* Network */
+  private ENVIRONMENT: string;
   private vpcCidr = "10.0.0.0/21";
   private port = 27017;
 
@@ -48,6 +49,7 @@ export class AwsDocdbSampleStack extends cdk.Stack {
   /******************************************************************** */
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
+    this.ENVIRONMENT = process.env.ENVIRONMENT!;
 
     /* Network */
     this.vpc = this.createVPC();
@@ -56,20 +58,18 @@ export class AwsDocdbSampleStack extends cdk.Stack {
     /* Database */
     this.subnetGroup = this.createSubnetGroup();
     
-    if (process.env.ENVIRONMENT === 'dev') {
-      this.DB_URL = 'mongodb://potrebitel:parola@localhost:27017';
+    if (this.ENVIRONMENT === 'dev') {
+      this.DB_URL = 'mongodb://potrebitel:parola@debug_database_1:27017';
       this.DB_NAME = 'urls';
       this.DB_CLIENT_OPTIONS = JSON.stringify({ useUnifiedTopology: true });
     } 
     
-    if (process.env.ENVIRONMENT === 'prod') {
+    if (this.ENVIRONMENT === 'prod') {
       this.dbCluster = this.createDbCluster();
       this.dbInstance = this.createDbInstance();
       this.DB_URL = `mongodb://${this.dbCluster.masterUsername}:${this.dbCluster.masterUserPassword}@${this.dbCluster.attrEndpoint}:${this.dbCluster.attrPort}`;
-      this.DB_NAME = this.dbInstance.dbInstanceIdentifier as string;
-      const ca = [readFileSync(`${__dirname}/rds-combined-ca-bundle.pem`)];
-      this.DB_CLIENT_OPTIONS = JSON.stringify({ ssl: true, sslValidate: true, sslCA: ca, useNewUrlParser: true});
-    } 
+      this.DB_NAME = this.dbInstance.dbInstanceIdentifier as string; 
+    }
 
     /* Controllers */
     this.controllers = this.createControllers();
@@ -178,9 +178,9 @@ export class AwsDocdbSampleStack extends cdk.Stack {
       environment: {
         DB_URL: this.DB_URL,
         DB_NAME: this.DB_NAME,
-        DB_CLIENT_OPTIONS: this.DB_CLIENT_OPTIONS
+        ENVIRONMENT: this.ENVIRONMENT
       },
-      timeout: cdk.Duration.seconds(60),
+      timeout: cdk.Duration.seconds(3),
       vpc: this.vpc,
       securityGroup: this.sg
     });
@@ -193,9 +193,9 @@ export class AwsDocdbSampleStack extends cdk.Stack {
       environment: {
         DB_URL: this.DB_URL,
         DB_NAME: this.DB_NAME,
-        DB_CLIENT_OPTIONS: this.DB_CLIENT_OPTIONS
+        ENVIRONMENT: this.ENVIRONMENT
       },
-      timeout: cdk.Duration.seconds(60),
+      timeout: cdk.Duration.seconds(3),
       vpc: this.vpc,
       securityGroup: this.sg
     });
