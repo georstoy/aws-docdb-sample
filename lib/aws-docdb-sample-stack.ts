@@ -5,10 +5,16 @@ import ec2 = require("@aws-cdk/aws-ec2");
 import docdb = require("@aws-cdk/aws-docdb");
 import lambda = require("@aws-cdk/aws-lambda");
 import apigateway = require("@aws-cdk/aws-apigateway");
+import { IResource } from "@aws-cdk/core";
 
-interface IControllers {
-  urlShortener: lambda.Function;
-  getLongURL: lambda.Function;
+interface IResourcePrototype {
+  name: string;
+  methodPrototypes: IMethodPrototype[];
+}
+
+interface IMethodPrototype {
+  httpMethod: string,
+  functionName: string,
 }
 
 export class AwsDocdbSampleStack extends cdk.Stack {
@@ -36,11 +42,10 @@ export class AwsDocdbSampleStack extends cdk.Stack {
 
   private DB_URL: string;
   private DB_NAME: string;
-  private DB_CLIENT_OPTIONS: string;
 
   /* REST API */
-  private controllers: IControllers;
   private router: apigateway.RestApi;
+  private resourcePrototypes: IResourcePrototype[];
 
   /******************************************************************** */
   /* Construction block                                                 */
@@ -61,7 +66,6 @@ export class AwsDocdbSampleStack extends cdk.Stack {
     if (this.ENVIRONMENT === 'dev') {
       this.DB_URL = 'mongodb://potrebitel:parola@debug_database_1:27017';
       this.DB_NAME = 'urls';
-      this.DB_CLIENT_OPTIONS = JSON.stringify({ useUnifiedTopology: true });
     } 
     
     if (this.ENVIRONMENT === 'prod') {
@@ -69,18 +73,44 @@ export class AwsDocdbSampleStack extends cdk.Stack {
       this.dbInstance = this.createDbInstance();
       this.DB_URL = `mongodb://${this.dbCluster.masterUsername}:${this.dbCluster.masterUserPassword}@${this.dbCluster.attrEndpoint}:${this.dbCluster.attrPort}`;
       this.DB_NAME = this.dbInstance.dbInstanceIdentifier as string; 
+
+      new cdk.CfnOutput(this, "db-url", {
+        value: this.DB_URL
+      });
     }
 
-    /* Controllers */
-    this.controllers = this.createControllers();
-
     /* Routing */
-    this.router = this.createRouter();
-
+    this.resourcePrototypes = [
+      { 
+        name: 'notes',
+        methodPrototypes: [
+          {
+            httpMethod: 'POST',
+          functionName: 'store'
+          },
+          {
+            httpMethod: 'GET',
+          functionName: 'view'
+          },
+          {
+            httpMethod: 'PUT',
+          functionName: 'update'
+          },
+          {
+            httpMethod: 'DELETE',
+          functionName: 'remove'
+          }
+        ]
+      }
+    ];
+    
+    this.router = this.routerInit(this.resourcePrototypes);
+    /*
+    this.addResource
     this.attachController(
       "POST",
       this.router.root,
-      "urls",
+      "",
       this.controllers.urlShortener
     );
     this.attachController(
@@ -89,10 +119,9 @@ export class AwsDocdbSampleStack extends cdk.Stack {
       "{id}",
       this.controllers.getLongURL
     );
-
-    new cdk.CfnOutput(this, "db-url", {
-      value: this.DB_URL
-    });
+  
+    
+    */
   }
 
   /******************************************************************** */
@@ -169,12 +198,12 @@ export class AwsDocdbSampleStack extends cdk.Stack {
   };
 
   /* Controllers */
-  private createControllers = (): IControllers => {
-    const urlShortener = new lambda.Function(this, "urlShortener", {
-      functionName: "urlShortener",
+  private createController = (methodPrototype: IMethodPrototype): apigateway.LambdaIntegration  => {
+    const controller = new lambda.Function(this, methodPrototype.functionName, {
+      functionName: methodPrototype.functionName,
       runtime: lambda.Runtime.NODEJS_12_X,
       code: new lambda.AssetCode("src"),
-      handler: "urlShortener.handler",
+      handler: ``"getLongURL.handler",
       environment: {
         DB_URL: this.DB_URL,
         DB_NAME: this.DB_NAME,
@@ -185,32 +214,29 @@ export class AwsDocdbSampleStack extends cdk.Stack {
       securityGroup: this.sg
     });
 
-    const getLongURL = new lambda.Function(this, "getLongURL", {
-      functionName: "getLongURL",
-      runtime: lambda.Runtime.NODEJS_12_X,
-      code: new lambda.AssetCode("src"),
-      handler: "getLongURL.handler",
-      environment: {
-        DB_URL: this.DB_URL,
-        DB_NAME: this.DB_NAME,
-        ENVIRONMENT: this.ENVIRONMENT
-      },
-      timeout: cdk.Duration.seconds(3),
-      vpc: this.vpc,
-      securityGroup: this.sg
-    });
-
-    return { urlShortener, getLongURL };
+    return new apigateway.LambdaIntegration(controller);
   };
 
   /* Routing */
-  private createRouter = (): apigateway.RestApi => {
+  private routerInit = (resourcePrototypes: IResourcePrototype[]): apigateway.RestApi => {
     const api = new apigateway.RestApi(this, "api", {
-      restApiName: "url-shortener"
+      restApiName: "notes-api"
+    });
+    resourcePrototypes.forEach(resourcePrototype => {
+      let resource: apigateway.IResource = api.root.addResource(resourcePrototype.name);
+      resourcePrototype.methodPrototypes.forEach(methodPrototype => {
+        let controller = this.createController(methodPrototype);
+        resource.addMethod(methodPrototype.httpMethod, controller);
+      });
     });
 
     return api;
   };
+
+  private defineResources = (): string[] => {
+    // all resources defined here will be added to the router/gateway in the constructor
+    return ['notes']
+  }
 
   private attachController = (
     httpMethod: string,
